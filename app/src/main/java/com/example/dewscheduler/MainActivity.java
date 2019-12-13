@@ -1,55 +1,125 @@
 package com.example.dewscheduler;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+
+public class MainActivity extends AppCompatActivity implements PlantAdapter.AdapterClickListener, View.OnClickListener, DialogInterface.OnClickListener, DialogInterface.OnCancelListener
+{
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference notebookRef = db.collection("Notebook");
+    private PlantAdapter adapter;
+    private int plantToDelete = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        FloatingActionButton buttonAddNote = findViewById(R.id.button_add_note);
+        buttonAddNote.setOnClickListener(this);
+        setUpRecyclerView();
+    }
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+    private void setUpRecyclerView() {
+        Query query = notebookRef.orderBy("number", Query.Direction.DESCENDING);
+        FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>()
+                .setQuery(query, Note.class)
+                .build();
+        adapter = new PlantAdapter(options);
+        adapter.setOnItemClickListener(this);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
             }
-        });
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                plantToDelete = viewHolder.getAdapterPosition();
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                String name = viewHolder instanceof PlantAdapter.NoteHolder ? ((PlantAdapter.NoteHolder)viewHolder).textViewTitle.getText().toString() : "<Error>";
+                builder.setMessage(String.format(getString(R.string.sure_to_delete), name))
+                    .setPositiveButton(R.string.answer_yes, MainActivity.this)
+                    .setNegativeButton(R.string.answer_no, MainActivity.this)
+                    .setOnCancelListener(MainActivity.this)
+                    .show();
+            }
+        }).attachToRecyclerView(recyclerView);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    @Override
+    public void OnClickAdapterItem(PlantAdapter.NoteHolder item)
+    {
+        Intent intent = new Intent(this, EditPlantActivity.class)
+            .putExtra("index", item.getAdapterPosition())
+            .putExtra("title", item.model.getTitle())
+            .putExtra("description", item.model.getDescription())
+            .putExtra("number", item.model.getNumber())
+            .putExtra("icon", item.model.getIcon());
+        startActivityForResult(intent, 0);
+    }
+
+    @Override
+    public void onClick(View v)
+    {
+        if(v.getId() == R.id.button_add_note)
+            startActivity(new Intent(MainActivity.this, EditPlantActivity.class));
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which)
+    {
+        if(which == DialogInterface.BUTTON_POSITIVE)
+            adapter.deleteItem(plantToDelete);
+        else
+            adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onCancel(DialogInterface dialog)
+    {
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK)
+        {
+            plantToDelete = data.getIntExtra("index", -1);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 }
