@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Dew Scheduler</string>
+    <string name="action_save">Save</string>
+    <string name="plant_title">Title</string>
+    <string name="plant_description">Description</string>
+    <string name="plant_number">Number</string>
+    <string name="header_new_plant">New plant</string>
+    <string name="header_edit_plant">Edit plant</string>
+    <string name="sure_to_delete">Are you sure to delete %s?</string>
+    <string name="answer_yes">Yes</string>
+    <string name="answer_no">No</string>
 </resources>
