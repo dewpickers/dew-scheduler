@@ -1,5 +1,6 @@
 package com.example.dewscheduler;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -14,20 +15,23 @@ import android.widget.Toast;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class NewNoteActivity extends AppCompatActivity {
+public class EditPlantActivity extends AppCompatActivity {
     private EditText editTextTitle;
     private EditText editTextDescription;
     private NumberPicker numberPickerNumber;
 
-    private boolean isEditing = false;
+    private int index = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_note);
 
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
-        setTitle("Add Note");
+        ActionBar ab = getSupportActionBar();
+        if(ab != null)
+            ab.setHomeAsUpIndicator(R.drawable.ic_close);
+
+        setTitle(getString(R.string.header_new_plant));
 
         editTextTitle = findViewById(R.id.edit_text_title);
         editTextDescription = findViewById(R.id.edit_text_description);
@@ -37,12 +41,11 @@ public class NewNoteActivity extends AppCompatActivity {
         numberPickerNumber.setMaxValue(10);
 
         Intent intent = getIntent();
-        String title = intent.getStringExtra("title");
-        if(title != null)
+        index = intent.getIntExtra("index", -1);
+        if(index != -1)
         {
-            isEditing = true;
-            setTitle("Edit Note");
-            editTextTitle.setText(title);
+                setTitle(getString(R.string.header_edit_plant));
+            editTextTitle.setText(intent.getStringExtra("title"));
             editTextDescription.setText(intent.getStringExtra("description"));
             numberPickerNumber.setValue(intent.getIntExtra("number", 1));
         }
@@ -79,6 +82,7 @@ public class NewNoteActivity extends AppCompatActivity {
                 .collection("Notebook");
         notebookRef.add(new Note(title, description, number));
         Toast.makeText(this, "Запись добавлена", Toast.LENGTH_SHORT).show();
+        setResult(RESULT_OK, new Intent().putExtra("index", index));
         finish();
     }
 }

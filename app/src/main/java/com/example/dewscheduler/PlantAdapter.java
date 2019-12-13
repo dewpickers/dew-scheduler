@@ -1,23 +1,23 @@
 package com.example.dewscheduler;
 
-import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-public class NoteAdapter extends FirestoreRecyclerAdapter<Note, NoteAdapter.NoteHolder> {
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
-    public NoteAdapter(@NonNull FirestoreRecyclerOptions<Note> options) {
+public class PlantAdapter extends FirestoreRecyclerAdapter<Note, PlantAdapter.NoteHolder> {
+
+    public PlantAdapter(@NonNull FirestoreRecyclerOptions<Note> options) {
         super(options);
     }
+
+    private AdapterClickListener clickListener;
 
     @Override
     protected void onBindViewHolder(@NonNull NoteHolder holder, int position, @NonNull Note model) {
@@ -29,19 +29,16 @@ public class NoteAdapter extends FirestoreRecyclerAdapter<Note, NoteAdapter.Note
     @NonNull
     @Override
     public NoteHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.note_item,
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.plant_item,
                 parent, false);
 
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Context context = v.getContext();
-                Intent intent = new Intent(context, NewNoteActivity.class);
-                NoteHolder holder = (NoteHolder)v.getTag();
-                intent.putExtra("title", holder.textViewTitle.getText());
-                intent.putExtra("description", holder.textViewDescription.getText());
-                intent.putExtra("number", Integer.valueOf(holder.textViewNumber.getText().toString()));
-                context.startActivity(intent);
+                if(clickListener != null)
+                {
+                    clickListener.OnClickAdapterItem((NoteHolder)v.getTag());
+                }
             }
         });
         NoteHolder holder = new NoteHolder(v);
@@ -51,7 +48,29 @@ public class NoteAdapter extends FirestoreRecyclerAdapter<Note, NoteAdapter.Note
 
     public void deleteItem(int position){
         getSnapshots().getSnapshot(position).getReference().delete();
+    }
 
+    int itemToDelete = -1;
+
+    public void scheduleDeleteItem(int position)
+    {
+        itemToDelete = position;
+    }
+
+    @Override
+    public void onDataChanged()
+    {
+        super.onDataChanged();
+        if(itemToDelete != -1)
+        {
+            deleteItem(itemToDelete);
+            itemToDelete = -1;
+        }
+    }
+
+    public void setOnItemClickListener(AdapterClickListener listener)
+    {
+        clickListener = listener;
     }
 
     class NoteHolder extends RecyclerView.ViewHolder {
@@ -65,5 +84,10 @@ public class NoteAdapter extends FirestoreRecyclerAdapter<Note, NoteAdapter.Note
             textViewDescription = itemView.findViewById(R.id.text_view_description);
             textViewNumber = itemView.findViewById(R.id.text_view_number);
         }
+    }
+
+    interface AdapterClickListener
+    {
+        void OnClickAdapterItem(NoteHolder item);
     }
 }
