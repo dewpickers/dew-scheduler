@@ -9,4 +9,7 @@
     <string name="sure_to_delete">Are you sure to delete %s?</string>
     <string name="answer_yes">Yes</string>
     <string name="answer_no">No</string>
+    <string name="plant_icon">Icon should be here</string>
+    <string name="action_select_icon">Select icon</string>
+    <string name="action_cancel">Cancel</string>
 </resources>

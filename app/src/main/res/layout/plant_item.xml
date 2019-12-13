@@ -14,16 +14,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/image_view_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="true"
+            android:contentDescription="@string/plant_icon"
+            android:layout_marginEnd="8dp"/>
+
         <TextView
             android:id="@+id/text_view_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLines="1"
             android:layout_toStartOf="@id/text_view_number"
-            android:layout_alignParentStart="true"
+            android:layout_toEndOf="@+id/image_view_icon"
             android:ellipsize="end"
+            android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            tools:text="&lt;dew name here&gt;"/>
+            tools:text="&lt;dew name here&gt;" />
         <TextView
             android:id="@+id/text_view_number"
             android:layout_width="wrap_content"
@@ -38,8 +47,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/text_view_title"
-            android:layout_alignParentStart="true"
-            tools:text="&lt;dew description here&gt;"/>
+            android:layout_toEndOf="@+id/image_view_icon"
+            tools:text="&lt;dew description here&gt;" />
 
     </RelativeLayout>
 

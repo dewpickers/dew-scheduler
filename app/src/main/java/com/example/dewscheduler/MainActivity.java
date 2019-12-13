@@ -59,8 +59,8 @@ public class MainActivity extends AppCompatActivity implements PlantAdapter.Adap
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 String name = viewHolder instanceof PlantAdapter.NoteHolder ? ((PlantAdapter.NoteHolder)viewHolder).textViewTitle.getText().toString() : "<Error>";
                 builder.setMessage(String.format(getString(R.string.sure_to_delete), name))
-                    .setPositiveButton(getString(R.string.answer_yes), MainActivity.this)
-                    .setNegativeButton(getString(R.string.answer_no), MainActivity.this)
+                    .setPositiveButton(R.string.answer_yes, MainActivity.this)
+                    .setNegativeButton(R.string.answer_no, MainActivity.this)
                     .setOnCancelListener(MainActivity.this)
                     .show();
             }
@@ -89,10 +89,10 @@ public class MainActivity extends AppCompatActivity implements PlantAdapter.Adap
     {
         Intent intent = new Intent(this, EditPlantActivity.class)
             .putExtra("index", item.getAdapterPosition())
-            .putExtra("title", item.textViewTitle.getText())
-            .putExtra("description", item.textViewDescription.getText())
-            .putExtra("number", Integer.valueOf(item.textViewNumber.getText().toString()));
-        plantToDelete = item.getAdapterPosition();
+            .putExtra("title", item.model.getTitle())
+            .putExtra("description", item.model.getDescription())
+            .putExtra("number", item.model.getNumber())
+            .putExtra("icon", item.model.getIcon());
         startActivityForResult(intent, 0);
     }
 
