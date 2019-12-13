@@ -71,11 +71,6 @@ public class MainActivity extends AppCompatActivity implements PlantAdapter.Adap
     protected void onStart() {
         super.onStart();
         adapter.startListening();
-        if(plantToDelete != -1)
-        {
-            adapter.scheduleDeleteItem(plantToDelete);
-            plantToDelete = -1;
-        }
     }
 
     @Override
@@ -110,14 +105,12 @@ public class MainActivity extends AppCompatActivity implements PlantAdapter.Adap
             adapter.deleteItem(plantToDelete);
         else
             adapter.notifyDataSetChanged();
-        plantToDelete = -1;
     }
 
     @Override
     public void onCancel(DialogInterface dialog)
     {
         adapter.notifyDataSetChanged();
-        plantToDelete = -1;
     }
 
     @Override

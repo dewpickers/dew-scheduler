@@ -51,24 +51,6 @@ public class PlantAdapter extends FirestoreRecyclerAdapter<Note, PlantAdapter.No
         getSnapshots().getSnapshot(position).getReference().delete();
     }
 
-    int itemToDelete = -1;
-
-    public void scheduleDeleteItem(int position)
-    {
-        itemToDelete = position;
-    }
-
-    @Override
-    public void onDataChanged()
-    {
-        super.onDataChanged();
-        if(itemToDelete != -1)
-        {
-            deleteItem(itemToDelete);
-            itemToDelete = -1;
-        }
-    }
-
     public void setOnItemClickListener(AdapterClickListener listener)
     {
         clickListener = listener;

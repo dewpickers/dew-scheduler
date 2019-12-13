@@ -107,7 +107,7 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
         String description = editTextDescription.getText().toString();
         int number = numberPickerNumber.getValue();
 
-        if (title.trim().isEmpty() || description.trim().isEmpty()) {
+        if (title.trim().isEmpty()) {
             Toast.makeText(this, "Пожалуйсте, заполните поле", Toast.LENGTH_SHORT).show();
             return;
         }
