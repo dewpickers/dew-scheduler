@@ -12,16 +12,16 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class PlantAdapter extends FirestoreRecyclerAdapter<Note, PlantAdapter.NoteHolder> {
+public class PlantAdapter extends FirestoreRecyclerAdapter<Plant, PlantAdapter.PlantHolder> {
 
-    public PlantAdapter(@NonNull FirestoreRecyclerOptions<Note> options) {
+    public PlantAdapter(@NonNull FirestoreRecyclerOptions<Plant> options) {
         super(options);
     }
 
     private AdapterClickListener clickListener;
 
     @Override
-    protected void onBindViewHolder(@NonNull NoteHolder holder, int position, @NonNull Note model) {
+    protected void onBindViewHolder(@NonNull PlantHolder holder, int position, @NonNull Plant model) {
         holder.textViewTitle.setText(model.getTitle());
         holder.textViewDescription.setText(model.getDescription());
         holder.textViewNumber.setText(String.valueOf(model.getNumber()));
@@ -31,7 +31,7 @@ public class PlantAdapter extends FirestoreRecyclerAdapter<Note, PlantAdapter.No
 
     @NonNull
     @Override
-    public NoteHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PlantHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.plant_item,
                 parent, false);
 
@@ -39,10 +39,10 @@ public class PlantAdapter extends FirestoreRecyclerAdapter<Note, PlantAdapter.No
             @Override
             public void onClick(View v) {
                 if(clickListener != null)
-                    clickListener.OnClickAdapterItem((NoteHolder)v.getTag());
+                    clickListener.OnClickAdapterItem((PlantHolder)v.getTag());
             }
         });
-        NoteHolder holder = new NoteHolder(v);
+        PlantHolder holder = new PlantHolder(v);
         v.setTag(holder);
         return holder;
     }
@@ -56,15 +56,15 @@ public class PlantAdapter extends FirestoreRecyclerAdapter<Note, PlantAdapter.No
         clickListener = listener;
     }
 
-    class NoteHolder extends RecyclerView.ViewHolder {
+    class PlantHolder extends RecyclerView.ViewHolder {
 
-        Note model;
+        Plant model;
         TextView textViewTitle;
         TextView textViewDescription;
         TextView textViewNumber;
         ImageView imageViewIcon;
 
-        public NoteHolder(View itemView) {
+        public PlantHolder(View itemView) {
             super(itemView);
             textViewTitle = itemView.findViewById(R.id.text_view_title);
             textViewDescription = itemView.findViewById(R.id.text_view_description);
@@ -75,6 +75,6 @@ public class PlantAdapter extends FirestoreRecyclerAdapter<Note, PlantAdapter.No
 
     interface AdapterClickListener
     {
-        void OnClickAdapterItem(NoteHolder item);
+        void OnClickAdapterItem(PlantHolder item);
     }
 }

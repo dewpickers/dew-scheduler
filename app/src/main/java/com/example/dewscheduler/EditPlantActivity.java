@@ -11,8 +11,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
@@ -68,7 +66,7 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.new_note_menu, menu);
+        menuInflater.inflate(R.menu.new_plant_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -76,7 +74,7 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.save_note:
-                saveNote();
+                savePlant();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -102,7 +100,7 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
         builder.show();
     }
 
-    private void saveNote() {
+    private void savePlant() {
         String title = editTextTitle.getText().toString();
         String description = editTextDescription.getText().toString();
         int number = numberPickerNumber.getValue();
@@ -111,9 +109,9 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
             Toast.makeText(this, "Пожалуйсте, заполните поле", Toast.LENGTH_SHORT).show();
             return;
         }
-        CollectionReference notebookRef = FirebaseFirestore.getInstance()
-                .collection("Notebook");
-        notebookRef.add(new Note(title, description, number, iconIndex));
+        CollectionReference plantsRef = FirebaseFirestore.getInstance()
+                .collection("Plants");
+        plantsRef.add(new Plant(title, description, number, iconIndex));
         Toast.makeText(this, "Запись добавлена", Toast.LENGTH_SHORT).show();
         setResult(RESULT_OK, new Intent().putExtra("index", index));
         finish();

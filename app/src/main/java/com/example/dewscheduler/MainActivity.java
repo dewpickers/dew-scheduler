@@ -21,7 +21,7 @@ import com.google.firebase.firestore.Query;
 public class MainActivity extends AppCompatActivity implements PlantAdapter.AdapterClickListener, View.OnClickListener, DialogInterface.OnClickListener, DialogInterface.OnCancelListener
 {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference notebookRef = db.collection("Notebook");
+    private CollectionReference plantsRef = db.collection("plants");
     private PlantAdapter adapter;
     private int plantToDelete = -1;
 
@@ -35,9 +35,9 @@ public class MainActivity extends AppCompatActivity implements PlantAdapter.Adap
     }
 
     private void setUpRecyclerView() {
-        Query query = notebookRef.orderBy("number", Query.Direction.DESCENDING);
-        FirestoreRecyclerOptions<Note> options = new FirestoreRecyclerOptions.Builder<Note>()
-                .setQuery(query, Note.class)
+        Query query = plantsRef.orderBy("number", Query.Direction.DESCENDING);
+        FirestoreRecyclerOptions<Plant> options = new FirestoreRecyclerOptions.Builder<Plant>()
+                .setQuery(query, Plant.class)
                 .build();
         adapter = new PlantAdapter(options);
         adapter.setOnItemClickListener(this);
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements PlantAdapter.Adap
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 plantToDelete = viewHolder.getAdapterPosition();
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                String name = viewHolder instanceof PlantAdapter.NoteHolder ? ((PlantAdapter.NoteHolder)viewHolder).textViewTitle.getText().toString() : "<Error>";
+                String name = viewHolder instanceof PlantAdapter.PlantHolder ? ((PlantAdapter.PlantHolder)viewHolder).textViewTitle.getText().toString() : "<Error>";
                 builder.setMessage(String.format(getString(R.string.sure_to_delete), name))
                     .setPositiveButton(R.string.answer_yes, MainActivity.this)
                     .setNegativeButton(R.string.answer_no, MainActivity.this)
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements PlantAdapter.Adap
     }
 
     @Override
-    public void OnClickAdapterItem(PlantAdapter.NoteHolder item)
+    public void OnClickAdapterItem(PlantAdapter.PlantHolder item)
     {
         Intent intent = new Intent(this, EditPlantActivity.class)
             .putExtra("index", item.getAdapterPosition())

@@ -1,16 +1,16 @@
 package com.example.dewscheduler;
 
-public class Note {
+public class Plant {
     private String title;
     private String description;
     private int number;
     private int icon;
 
-    public Note (){
+    public Plant (){
         //empty but needed
     }
 
-    public Note (String title, String description, int number, int icon){
+    public Plant (String title, String description, int number, int icon){
         this.title = title;
         this.description = description;
         this.number = number;
