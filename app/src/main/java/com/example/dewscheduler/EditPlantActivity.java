@@ -110,7 +110,7 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
             return;
         }
         CollectionReference plantsRef = FirebaseFirestore.getInstance()
-                .collection("Plants");
+                .collection("plants");
         plantsRef.add(new Plant(title, description, number, iconIndex));
         Toast.makeText(this, "Запись добавлена", Toast.LENGTH_SHORT).show();
         setResult(RESULT_OK, new Intent().putExtra("index", index));
