@@ -21,6 +21,7 @@
         </activity>
         <activity android:name=".EditPlantActivity"
             android:parentActivityName=".MainActivity"/>
+        <receiver android:name=".NotificationPublisher" />
     </application>
 
 </manifest>
