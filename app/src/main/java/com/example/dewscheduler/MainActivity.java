@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements PlantAdapter.Adap
     }
 
     private void setUpRecyclerView() {
-        Query query = plantsRef.orderBy("number", Query.Direction.DESCENDING);
+        Query query = plantsRef.orderBy("number", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<Plant> options = new FirestoreRecyclerOptions.Builder<Plant>()
                 .setQuery(query, Plant.class)
                 .build();
