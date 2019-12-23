@@ -3,7 +3,7 @@
     <string name="action_save">Save</string>
     <string name="plant_title">Title</string>
     <string name="plant_description">Description</string>
-    <string name="plant_number">Number</string>
+    <string name="plant_number">Repetition interval in days</string>
     <string name="header_new_plant">New plant</string>
     <string name="header_edit_plant">Edit plant</string>
     <string name="sure_to_delete">Are you sure to delete %s?</string>
@@ -11,5 +11,9 @@
     <string name="answer_no">No</string>
     <string name="plant_icon">Icon should be here</string>
     <string name="action_select_icon">Select icon</string>
+    <string name="warn_fill_fields">Please, fill all fields</string>
+    <string name="save_plant">New plant is added</string>
+    <string name="next_watering">Days to next watering: %i</string>
+    <string name="water_button">Water</string>
     <string name="action_cancel">Cancel</string>
 </resources>

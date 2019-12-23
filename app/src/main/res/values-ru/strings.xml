@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Dew Scheduler</string>
+    <string name="action_save">Сохранить</string>
+    <string name="action_select_icon">Выбрать иконку</string>
+    <string name="answer_no">Нет</string>
+    <string name="answer_yes">Да</string>
+    <string name="header_edit_plant">Изменить растение</string>
+    <string name="header_new_plant">Новое растение</string>
+    <string name="next_watering">Дней до полива: </string>
+    <string name="plant_description">Описание</string>
+    <string name="plant_icon">Здесь будет иконка</string>
+    <string name="plant_number">Интервал поливов в днях</string>
+    <string name="plant_title">Название</string>
+    <string name="save_plant">Новое растение посажено</string>
+    <string name="sure_to_delete">Точно удалить %s?</string>
+    <string name="warn_fill_fields">Укажите название</string>
+    <string name="water_button">Полить!</string>
+    <string name="action_cancel">Отмена</string>
+</resources>
